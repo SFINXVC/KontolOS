@@ -1,6 +1,6 @@
 # KontolOS
 
-A hobby operating system built completely from scratch using C and Assembly.
+A hobby operating system based on sistem reproduksi
 
 ```
   _  __            _        _  ___  ____  
@@ -25,32 +25,33 @@ A hobby operating system built completely from scratch using C and Assembly.
 
 ## Shell Commands
 
-| Command    | Description                      |
-|------------|----------------------------------|
-| `help`     | Display available commands       |
-| `clear`    | Clear the screen                 |
-| `echo`     | Echo text to the screen          |
-| `info`     | Display system information       |
-| `uptime`   | Show system uptime               |
-| `memory`   | Display memory statistics        |
-| `reboot`   | Reboot the system                |
-| `halt`     | Halt the system                  |
-| `version`  | Display OS version               |
-| `color`    | Change text color (0-15)         |
+| Command     | Description                |
+| ----------- | -------------------------- |
+| `help`    | Display available commands |
+| `clear`   | Clear the screen           |
+| `echo`    | Echo text to the screen    |
+| `info`    | Display system information |
+| `uptime`  | Show system uptime         |
+| `memory`  | Display memory statistics  |
+| `reboot`  | Reboot the system          |
+| `halt`    | Halt the system            |
+| `version` | Display OS version         |
+| `color`   | Change text color (0-15)   |
 
 ## Prerequisites
 
 You'll need the following tools installed:
 
 1. **NASM** (Netwide Assembler)
+
    - Download: https://nasm.us/
    - Or install via: `choco install nasm`
-
 2. **i686-elf Cross-Compiler**
+
    - Download prebuilt: https://github.com/lordmilko/i686-elf-tools/releases
    - Extract and add to PATH
-
 3. **QEMU** (for testing)
+
    - Download: https://qemu.org/download/
    - Or install via: `choco install qemu`
 
@@ -152,16 +153,16 @@ KontolOS/
 
 ### Memory Layout
 
-| Address Range       | Description              |
-|---------------------|--------------------------|
-| `0x00000 - 0x07BFF` | Real mode IVT and BIOS   |
-| `0x07C00 - 0x07DFF` | Stage 1 bootloader       |
-| `0x10000 - 0x11FFF` | Stage 2 bootloader       |
-| `0x20000 - 0x2FFFF` | Temporary kernel load    |
-| `0x90000 - 0x9FFFF` | Stack                    |
-| `0xB8000 - 0xB8FFF` | VGA text buffer          |
-| `0x100000+`         | Kernel (at 1MB)          |
-| `0x200000+`         | Heap (4MB)               |
+| Address Range         | Description            |
+| --------------------- | ---------------------- |
+| `0x00000 - 0x07BFF` | Real mode IVT and BIOS |
+| `0x07C00 - 0x07DFF` | Stage 1 bootloader     |
+| `0x10000 - 0x11FFF` | Stage 2 bootloader     |
+| `0x20000 - 0x2FFFF` | Temporary kernel load  |
+| `0x90000 - 0x9FFFF` | Stack                  |
+| `0xB8000 - 0xB8FFF` | VGA text buffer        |
+| `0x100000+`         | Kernel (at 1MB)        |
+| `0x200000+`         | Heap (4MB)             |
 
 ## License
 
