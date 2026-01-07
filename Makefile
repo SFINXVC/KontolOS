@@ -25,6 +25,7 @@ BOOT_DIR = $(SRC_DIR)/boot
 KERNEL_DIR = $(SRC_DIR)/kernel
 DRIVERS_DIR = $(SRC_DIR)/drivers
 LIB_DIR = $(SRC_DIR)/lib
+FS_DIR = $(SRC_DIR)/fs
 
 # Output files
 OS_IMAGE = $(BUILD_DIR)/kontolos.img
@@ -58,6 +59,8 @@ DRIVER_C_SRC = $(DRIVERS_DIR)/vga.c \
 
 LIB_C_SRC = $(LIB_DIR)/string.c
 
+FS_C_SRC = $(FS_DIR)/ramfs.c
+
 # Object files
 KERNEL_OBJ = $(BUILD_DIR)/kernel/kernel_entry.o \
              $(BUILD_DIR)/kernel/isr.o \
@@ -72,7 +75,9 @@ DRIVER_OBJ = $(BUILD_DIR)/drivers/vga.o \
 
 LIB_OBJ = $(BUILD_DIR)/lib/string.o
 
-ALL_OBJ = $(KERNEL_OBJ) $(DRIVER_OBJ) $(LIB_OBJ)
+FS_OBJ = $(BUILD_DIR)/fs/ramfs.o
+
+ALL_OBJ = $(KERNEL_OBJ) $(DRIVER_OBJ) $(LIB_OBJ) $(FS_OBJ)
 
 # Default target
 .PHONY: all
@@ -91,6 +96,7 @@ dirs:
 	@mkdir -p $(BUILD_DIR)/kernel
 	@mkdir -p $(BUILD_DIR)/drivers
 	@mkdir -p $(BUILD_DIR)/lib
+	@mkdir -p $(BUILD_DIR)/fs
 
 # Build Stage 1 bootloader
 $(STAGE1_BIN): $(BOOT_DIR)/stage1.asm | dirs
@@ -117,6 +123,10 @@ $(BUILD_DIR)/drivers/%.o: $(DRIVERS_DIR)/%.c | dirs
 
 # Compile library C files
 $(BUILD_DIR)/lib/%.o: $(LIB_DIR)/%.c | dirs
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Compile filesystem C files
+$(BUILD_DIR)/fs/%.o: $(FS_DIR)/%.c | dirs
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Link kernel

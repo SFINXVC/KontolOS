@@ -140,6 +140,13 @@ static void keyboard_handler(struct interrupt_frame *frame)
             c = scancode_to_ascii[scancode];
         }
 
+        /* Handle Ctrl key - convert letters to control characters */
+        if (ctrl_pressed && c >= 'a' && c <= 'z') {
+            c = c - 'a' + 1;  /* Ctrl+A=1, Ctrl+B=2, ..., Ctrl+Z=26 */
+        } else if (ctrl_pressed && c >= 'A' && c <= 'Z') {
+            c = c - 'A' + 1;  /* Same for uppercase */
+        }
+
         if (c != 0) {
             buffer_put(c);
         }

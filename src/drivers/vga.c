@@ -250,3 +250,76 @@ size_t vga_get_col(void)
 {
     return vga_col;
 }
+
+/*
+ * Hide the hardware cursor
+ */
+void vga_hide_cursor(void)
+{
+    outb(VGA_CTRL_PORT, 0x0A);
+    outb(VGA_DATA_PORT, 0x20);  /* Bit 5 set = cursor disabled */
+}
+
+/*
+ * Show the hardware cursor
+ */
+void vga_show_cursor(void)
+{
+    outb(VGA_CTRL_PORT, 0x0A);
+    outb(VGA_DATA_PORT, (inb(VGA_DATA_PORT) & 0xC0) | 14);  /* Cursor start scanline */
+    outb(VGA_CTRL_PORT, 0x0B);
+    outb(VGA_DATA_PORT, (inb(VGA_DATA_PORT) & 0xE0) | 15);  /* Cursor end scanline */
+}
+
+/*
+ * Put a character at a specific position (without moving cursor)
+ */
+void vga_put_at(size_t row, size_t col, char c)
+{
+    if (row < VGA_HEIGHT && col < VGA_WIDTH) {
+        const size_t index = row * VGA_WIDTH + col;
+        vga_buffer[index] = vga_entry(c, vga_color);
+    }
+}
+
+/*
+ * Print a string at a specific position
+ */
+void vga_print_at(size_t row, size_t col, const char *str)
+{
+    size_t saved_row = vga_row;
+    size_t saved_col = vga_col;
+    
+    vga_row = row;
+    vga_col = col;
+    
+    while (*str && vga_col < VGA_WIDTH) {
+        if (*str == '\n') {
+            vga_row++;
+            vga_col = col;  /* Reset to starting column */
+        } else {
+            vga_put_at(vga_row, vga_col, *str);
+            vga_col++;
+        }
+        str++;
+    }
+    
+    vga_row = saved_row;
+    vga_col = saved_col;
+}
+
+/*
+ * Print a string centered on a row
+ */
+void vga_print_centered(size_t row, const char *str)
+{
+    size_t len = 0;
+    const char *p = str;
+    while (*p) {
+        len++;
+        p++;
+    }
+    
+    size_t col = (VGA_WIDTH > len) ? (VGA_WIDTH - len) / 2 : 0;
+    vga_print_at(row, col, str);
+}

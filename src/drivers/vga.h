@@ -43,5 +43,10 @@ void vga_update_cursor(void);
 void vga_set_cursor(size_t row, size_t col);
 size_t vga_get_row(void);
 size_t vga_get_col(void);
+void vga_hide_cursor(void);
+void vga_show_cursor(void);
+void vga_put_at(size_t row, size_t col, char c);
+void vga_print_at(size_t row, size_t col, const char *str);
+void vga_print_centered(size_t row, const char *str);
 
 #endif /* VGA_H */
